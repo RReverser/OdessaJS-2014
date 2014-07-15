@@ -1,0 +1,14 @@
+{
+  "name": "odessajs-workshop",
+  "version": "0.0.0",
+  "description": "Code from OdessaJS-2014 workshop.",
+  "main": "index.js",
+  "author": "Ingvar Stepanyan <me@rreverser.com> (http://rreverser.com)",
+  "license": "MIT",
+  "dependencies": {
+    "escodegen": "^1.3.3",
+    "esprima": "git+https://github.com/ariya/esprima.git#harmony",
+    "estraverse": "^1.5.0"
+  },
+  "repository": "RReverser/OdessaJS-2014"
+}
