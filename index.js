@@ -14,16 +14,30 @@ ast = estraverse.replace(ast, {
 	leave: function (node) {
 		if (node.type === 'ArrowFunctionExpression') {
 			return {
-				type: 'FunctionExpression',
-				id: node.id,
-				params: node.params,
-				body: {
-					type: 'BlockStatement',
-					body: [{
-						type: 'ReturnStatement',
-						argument: node.body
-					}]
-				}
+				type: 'CallExpression',
+				callee: {
+					type: 'MemberExpression',
+					object: {
+						type: 'FunctionExpression',
+						id: node.id,
+						params: node.params,
+						body: {
+							type: 'BlockStatement',
+							body: [{
+								type: 'ReturnStatement',
+								argument: node.body
+							}]
+						}
+					},
+					computed: false,
+					property: {
+						type: 'Identifier',
+						name: 'bind'
+					}
+				},
+				arguments: [{
+					type: 'ThisExpression'
+				}]
 			};
 		}
 

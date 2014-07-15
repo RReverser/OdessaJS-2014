@@ -1,8 +1,8 @@
 var getTransformer = function () {
-    return function (x) {
-        return typeof x === 'object' ? x['*'](2) : x * 2;
-    };
-};
+        return function (x) {
+            return typeof x === 'object' ? x['*'](2) : x * 2;
+        }.bind(this);
+    }.bind(this);
 var transformer = getTransformer();
 console.log(transformer(100));
 function Vector(x, y) {
