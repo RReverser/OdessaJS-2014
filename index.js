@@ -6,7 +6,10 @@ var fs = require('fs');
 fs.readFile('test.js', 'utf-8', function (err, code) {
 	if (err) throw err;
 
-	var ast = esprima.parse(code, {loc: true});
+	var ast = esprima.parse(code, {
+		loc: true,
+		source: 'test.js'
+	});
 
 	ast = estraverse.replace(ast, {
 		leave: function (node) {
@@ -22,6 +25,40 @@ fs.readFile('test.js', 'utf-8', function (err, code) {
 							argument: node.body
 						}]
 					}
+				};
+			}
+
+			if (node.type === 'BinaryExpression') {
+				return {
+					type: 'ConditionalExpression',
+					test: {
+						type: 'BinaryExpression',
+						operator: '===',
+						left: {
+							type: 'UnaryExpression',
+							operator: 'typeof',
+							argument: node.left,
+							prefix: true
+						},
+						right: {
+							type: 'Literal',
+							value: 'object'
+						}
+					},
+					consequent: {
+						type: 'CallExpression',
+						callee: {
+							type: 'MemberExpression',
+							computed: true,
+							object: node.left,
+							property: {
+								type: 'Literal',
+								value: node.operator
+							}
+						},
+						arguments: [node.right]
+					},
+					alternate: node
 				};
 			}
 		}
